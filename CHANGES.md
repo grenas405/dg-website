@@ -16,3 +16,7 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
     - Dynamic countdown timer for the teaser launch.
 - `README.md`: Project overview, tech stack details, and developer credits.
 - `CHANGES.md`: Initial changelog tracking.
+
+### Changed
+- Adjusted hero title (`.glitch-text`) font size and added `max-width` to `.hero-content` to prevent layout overflow.
+- Improved mobile centering for hero content.
