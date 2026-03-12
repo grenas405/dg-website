@@ -20,3 +20,6 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 ### Changed
 - Adjusted hero title (`.glitch-text`) font size and added `max-width` to `.hero-content` to prevent layout overflow.
 - Improved mobile centering for hero content.
+
+### Changed
+- Updated main.css

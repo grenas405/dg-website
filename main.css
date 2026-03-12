@@ -113,16 +113,19 @@ nav {
     min-height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 5%;
     padding-top: 100px;
     position: relative;
     overflow: hidden;
+    gap: 2rem;
 }
 
 .hero-content {
     flex: 1;
     z-index: 2;
-    max-width: 700px;
+    max-width: 600px;
+    min-width: 400px;
 }
 
 .pre-title {
@@ -136,11 +139,11 @@ nav {
 
 .glitch-text {
     font-family: var(--font-heading);
-    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-size: clamp(3rem, 6vw, 5.5rem);
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.1;
     margin-bottom: 2rem;
-    position: relative;
+    white-space: nowrap;
 }
 
 .hero-sub {
@@ -187,6 +190,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 500px;
 }
 
 .floating-blobs {
@@ -212,20 +216,20 @@ nav {
     z-index: 5;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 2.5rem 2rem;
+    padding: 2rem 2rem;
     border-radius: 12px;
     text-align: center;
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.5rem;
-    width: 180px;
+    font-size: 1.2rem;
+    width: 150px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 
@@ -339,19 +343,17 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Mobile Adjustments */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .hero {
         flex-direction: column;
         text-align: center;
+        padding-top: 150px;
+        justify-content: center;
     }
     .hero-content {
-        margin-left: auto;
-        margin-right: auto;
-    }
-    .hero-visual {
-        width: 100%;
-        margin-top: 4rem;
+        max-width: 100%;
+        min-width: unset;
+        margin-bottom: 3rem;
     }
     .hero-sub {
         margin-left: auto;
@@ -360,4 +362,5 @@ footer {
     .hero-btns {
         justify-content: center;
     }
-}
+    .hero-visual {
+   
