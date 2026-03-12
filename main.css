@@ -251,7 +251,7 @@ nav::after {
 .glitch-text {
   display: block;
   font-family: var(--font-heading);
-  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
   font-weight: 800;
   line-height: 1.0;
   position: relative;
