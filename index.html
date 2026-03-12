@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DenoGenesis | Democratizing Web Dev in OKC</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <nav>
+        <div class="logo">DG<span>.</span></div>
+        <div class="nav-links">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#stack" class="nav-link">Stack</a>
+            <a href="#" class="cta-btn">Join Waitlist</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2 class="pre-title">The Future of Oklahoma City Web Dev</h2>
+                <h1 class="glitch-text" data-text="DENOGENESIS">DENOGENESIS</h1>
+                <p class="hero-sub">A high-performance, open-source web framework built for the next generation of creators. Simple, fast, and local-first.</p>
+                <div class="hero-btns">
+                    <button class="primary-btn">Explore the Genesis</button>
+                    <button class="secondary-btn">View on GitHub</button>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="floating-blobs">
+                    <div class="blob b1"></div>
+                    <div class="blob b2"></div>
+                    <div class="blob b3"></div>
+                </div>
+                <div class="stack-cards">
+                    <div class="card" id="card-deno">Deno</div>
+                    <div class="card" id="card-ts">TypeScript</div>
+                    <div class="card" id="card-nginx">Nginx</div>
+                    <div class="card" id="card-systemd">Systemd</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stack" class="features">
+            <div class="section-header">
+                <h3>The Power Stack</h3>
+                <p>Industrial grade tools, simplified for you.</p>
+            </div>
+            <div class="grid">
+                <div class="feature-item">
+                    <div class="icon">🦕</div>
+                    <h4>Deno</h4>
+                    <p>Modern runtime with built-in security and zero configuration.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🛡️</div>
+                    <h4>Nginx</h4>
+                    <p>Rock-solid reverse proxying for high-traffic OKC apps.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">⚙️</div>
+                    <h4>Systemd</h4>
+                    <p>Process management that keeps your genesis alive 24/7.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon">🟦</div>
+                    <h4>TypeScript</h4>
+                    <p>Type-safety by default. Catch bugs before they hit production.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="okc-pride">
+            <div class="okc-content">
+                <h2>Built in OKC.</h2>
+                <p>Created by <strong>Pedro M. Dominguez</strong>. DenoGenesis isn't just a framework; it's a movement to democratize technology in the heart of Oklahoma and beyond.</p>
+            </div>
+        </section>
+
+        <section class="teaser-footer">
+            <h2>Something big is coming...</h2>
+            <div class="countdown">
+                <div class="count-item"><span id="days">--</span>d</div>
+                <div class="count-item"><span id="hours">--</span>h</div>
+                <div class="count-item"><span id="mins">--</span>m</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 DenoGenesis. Built with ❤️ in Oklahoma City.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
