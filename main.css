@@ -242,12 +242,18 @@ nav::after {
 }
 
 /* ─── Glitch ─────────────────────────────────────────────── */
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
 .glitch-text {
+  display: block;
   font-family: var(--font-heading);
   font-size: clamp(3.5rem, 10vw, 8rem);
   font-weight: 800;
   line-height: 1.0;
-  margin-bottom: 2rem;
   position: relative;
   color: var(--fg);
   text-transform: uppercase;

@@ -21,6 +21,12 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 - Adjusted hero title (`.glitch-text`) font size and added `max-width` to `.hero-content` to prevent layout overflow.
 - Improved mobile centering for hero content.
 
+## [0.1.2] - 2026-03-12
+
+### Changed
+- `index.html`: Split hero `h1.glitch-text` into two separate `span.glitch-text` elements ("DENO" / "GENESIS") inside a `.hero-title` wrapper so each word renders on its own line and the glitch pseudo-elements align correctly.
+- `main.css`: Added `.hero-title` flex-column wrapper; set `.glitch-text` to `display: block`.
+
 ## [0.1.1] - 2026-03-12
 
 ### Changed
