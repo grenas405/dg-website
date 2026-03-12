@@ -147,6 +147,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
+    // --- Scroll Progress Bar ---
+    const scrollBar = document.getElementById('scrollProgress');
+    if (scrollBar) {
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollBar.style.width = (scrollTop / docHeight * 100) + '%';
+        }, { passive: true });
+    }
+
     // --- Button Fun ---
     const primaryBtn = document.querySelector('.primary-btn');
     primaryBtn.addEventListener('click', () => {

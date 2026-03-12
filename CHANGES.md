@@ -21,5 +21,9 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 - Adjusted hero title (`.glitch-text`) font size and added `max-width` to `.hero-content` to prevent layout overflow.
 - Improved mobile centering for hero content.
 
+## [0.1.1] - 2026-03-12
+
 ### Changed
-- Updated main.css
+- `main.css`: Major visual overhaul — refined color palette (deeper bg, indigo secondary, improved muted fg), noise grain overlay, hero grid-line pattern, floating blob CSS keyframe animations, enhanced glassmorphism on nav and cards, gradient border accents on feature items and countdown, individual accent colors per stack card via CSS custom properties, scroll-progress bar styles, tighter typography (letter-spacing, improved clamp sizes).
+- `index.html`: Added scroll progress bar element, `data-label` attributes on countdown items (used by CSS `::after` for labeling), removed inline letter suffixes from countdown spans.
+- `script.js`: Wired scroll progress bar width to page scroll position.

@@ -13,6 +13,7 @@
     />
   </head>
   <body>
+    <div class="scroll-progress" id="scrollProgress"></div>
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
@@ -29,9 +30,7 @@
       <section class="hero">
         <div class="hero-content">
           <h2 class="pre-title">The Future of Oklahoma City Web Dev</h2>
-          <h1 class="glitch-text" data-text="DENO GENESIS">
-            DENO<br />GENESIS
-          </h1>
+          <h1 class="glitch-text" data-text="DENOGENESIS">DENOGENESIS</h1>
           <p class="hero-sub">
             A high-performance, open-source web framework built for the next
             generation of creators. Simple, fast, and local-first.
@@ -102,9 +101,15 @@
       <section class="teaser-footer">
         <h2>Something big is coming...</h2>
         <div class="countdown">
-          <div class="count-item"><span id="days">--</span>d</div>
-          <div class="count-item"><span id="hours">--</span>h</div>
-          <div class="count-item"><span id="mins">--</span>m</div>
+          <div class="count-item" data-label="days">
+            <span id="days">--</span>
+          </div>
+          <div class="count-item" data-label="hours">
+            <span id="hours">--</span>
+          </div>
+          <div class="count-item" data-label="mins">
+            <span id="mins">--</span>
+          </div>
         </div>
       </section>
     </main>
@@ -117,4 +122,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-
