@@ -2,6 +2,11 @@
 
 All notable changes to the DenoGenesis frontend will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Hero title not centered on mobile: added `align-items: center` to `.hero-title` in the `max-width: 900px` media query.
+
 ## [0.1.0] - 2026-03-12
 
 ### Added

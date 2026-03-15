@@ -1295,6 +1295,9 @@ footer p:hover {
   .hero-content {
     max-width: 100%;
   }
+  .hero-title {
+    align-items: center;
+  }
   .hero-visual {
     width: 100%;
     height: auto;
