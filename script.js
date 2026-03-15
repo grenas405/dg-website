@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function typewriteElement(el, startDelay = 0, charDelay = 38, keepCursor = true) {
         if (!el) return;
 
-        const text = el.textContent.trim();
+        const text = el.textContent.trim().replace(/\s+/g, ' ');
         el.textContent = '';
 
         // Build char spans
