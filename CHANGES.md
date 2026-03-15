@@ -27,6 +27,19 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 - `index.html`: Split hero `h1.glitch-text` into two separate `span.glitch-text` elements ("DENO" / "GENESIS") inside a `.hero-title` wrapper so each word renders on its own line and the glitch pseudo-elements align correctly.
 - `main.css`: Added `.hero-title` flex-column wrapper; set `.glitch-text` to `display: block`.
 
+## [0.3.0] - 2026-03-15
+
+### Added
+- `index.html`: New `.dev-note` section replacing the countdown — cathedral-edition developer manifesto by Pedro M. Dominguez. Contains: CSS gothic arch crown, rotating ✦ scripture ornament, large italic quote ("For many are called, few are chosen." — Matthew 22:14), tribute block to St. Joseph Old Cathedral (OKC, Est. 1903), stained-glass ✛ cross divider, developer name/role/mission, gradient-border CTA pill with pulsing ring.
+- `main.css`: Full `.dev-note` cathedral component — indigo vault + gold halo + nave-pillar atmosphere via layered radial gradients + repeating-linear-gradient; `.cathedral-arch` gothic arch ornament with double-border + `arch-glow` keyframe; `.scripture-ornament` slow-spin animation; `.scripture-quote` gold gradient text with `gradient-shift`; `.cathedral-tribute` with `tribute-shimmer` keyframe on St. Joseph name; `.stained-divider` gold line + ✛ cross glyph; `.dev-note-mission` starts at opacity:0 for typewriter reveal; `.dev-note-cta` gradient border-box pill with `.cta-pulse` ring.
+- `main.css`: New keyframes — `arch-glow`, `ornament-rotate`, `tribute-shimmer`.
+- `script.js`: IntersectionObserver on `.dev-note` — stagger-animates all blocks in on scroll entry, then typewriters mission statement (28ms/char, no cursor kept).
+
+### Removed
+- `index.html`: Countdown timer section (`.teaser-footer`, `.countdown`, `.count-item`, `.count-sep`).
+- `main.css`: All countdown styles and `@keyframes count-pulse`, `count-sweep`, `sep-pulse`.
+- `script.js`: `targetDate`, `updateCountdown()`, `setInterval`, teaser observer block.
+
 ## [0.2.0] - 2026-03-15
 
 ### Added

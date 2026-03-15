@@ -36,15 +36,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = el.textContent.trim().replace(/\s+/g, ' ');
         el.textContent = '';
 
-        // Build char spans
-        const chars = text.split('').map(char => {
-            const span = document.createElement('span');
-            span.className = 'char';
-            span.textContent = char === ' ' ? '\u00A0' : char;
-            return span;
+        // Build char spans, grouping each word in a nowrap wrapper so
+        // line breaks only happen at space boundaries, never mid-word.
+        const chars = [];
+        const words = text.split(' ');
+        words.forEach((word, wi) => {
+            const wordWrap = document.createElement('span');
+            wordWrap.style.cssText = 'display:inline-block;white-space:nowrap;';
+            word.split('').forEach(char => {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.textContent = char;
+                wordWrap.appendChild(span);
+                chars.push(span);
+            });
+            el.appendChild(wordWrap);
+            // Space between words (breakable point)
+            if (wi < words.length - 1) {
+                const space = document.createElement('span');
+                space.className = 'char';
+                space.textContent = '\u00A0';
+                el.appendChild(space);
+                chars.push(space);
+            }
         });
-
-        chars.forEach(span => el.appendChild(span));
 
         // Blinking cursor
         const cursorEl = document.createElement('span');
@@ -53,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Animate characters
         anime({
-            targets: el.querySelectorAll('.char'),
+            targets: chars,
             opacity: [0, 1],
             delay: anime.stagger(charDelay, { start: startDelay }),
             duration: 1,
@@ -156,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const observerOptions = { threshold: 0.18 };
 
     let featureTyped = false;
-    let teaserTyped = false;
+    let devNoteAnimated = false;
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -185,13 +200,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 observer.unobserve(target);
             }
 
-            // Teaser section typewriter
-            if (target.classList.contains('teaser-footer')) {
-                if (!teaserTyped) {
-                    teaserTyped = true;
-                    const teaserH2 = target.querySelector('h2');
-                    typewriteElement(teaserH2, 0, 55, true);
-                }
+            // Developer note cathedral section
+            if (target.classList.contains('dev-note') && !devNoteAnimated) {
+                devNoteAnimated = true;
+
+                // Stagger in all major blocks
+                anime({
+                    targets: [
+                        '.dev-note-scripture',
+                        '.cathedral-tribute',
+                        '.stained-divider',
+                        '.dev-note-name',
+                        '.dev-note-role',
+                        '.dev-note-cta'
+                    ],
+                    opacity: [0, 1],
+                    translateY: [32, 0],
+                    delay: anime.stagger(180),
+                    duration: 900,
+                    easing: 'easeOutExpo'
+                });
+
+                // Typewriter mission statement after other elements appear
+                const missionEl = target.querySelector('.dev-note-mission');
+                typewriteElement(missionEl, 900, 28, false);
+
                 observer.unobserve(target);
             }
         });
@@ -200,28 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
     if (grid) observer.observe(grid);
 
-    const teaserSection = document.querySelector('.teaser-footer');
-    if (teaserSection) observer.observe(teaserSection);
-
-    // --- Simple Countdown Timer (7 days from now for teaser effect) ---
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 7);
-
-    function updateCountdown() {
-        const now = new Date();
-        const diff = targetDate - now;
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-
-        document.getElementById('days').innerText = days;
-        document.getElementById('hours').innerText = hours;
-        document.getElementById('mins').innerText = mins;
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    const devNoteSection = document.querySelector('.dev-note');
+    if (devNoteSection) observer.observe(devNoteSection);
 
     // --- Scroll Progress Bar ---
     const scrollBar = document.getElementById('scrollProgress');
