@@ -223,6 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Typewriter mission statement after other elements appear
                 const missionEl = target.querySelector('.dev-note-mission');
+                // Flush the container opacity so chars typed inside are visible
+                anime({
+                    targets: missionEl,
+                    opacity: [0, 1],
+                    duration: 1,
+                    delay: 900,
+                    easing: 'linear'
+                });
                 typewriteElement(missionEl, 900, 28, false);
 
                 observer.unobserve(target);
