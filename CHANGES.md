@@ -5,6 +5,7 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Systemd service unit for running the Deno app from `/home/sysadmin/.local/src/development/dg-website` on the VPS.
 - Nginx reverse proxy config for `denogenesis.com` targeting the Deno app on `127.0.0.1:8004`.
 - Deno web app entrypoint using JSR `@std/http/file-server` for the existing site assets.
 - Composable server modules for config, HTTP helpers, app assembly, and static asset allowlisting.

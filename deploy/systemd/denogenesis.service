@@ -1,0 +1,29 @@
+[Unit]
+Description=DenoGenesis Deno web app
+Documentation=https://denogenesis.com
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=sysadmin
+Group=sysadmin
+WorkingDirectory=/home/sysadmin/.local/src/development/dg-website
+Environment=HOME=/home/sysadmin
+Environment=DENO_DIR=/home/sysadmin/.cache/deno
+Environment=PATH=/home/sysadmin/.deno/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=HOST=127.0.0.1
+Environment=PORT=8004
+ExecStart=/usr/bin/env deno task start
+Restart=on-failure
+RestartSec=5s
+KillSignal=SIGINT
+TimeoutStopSec=20s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/home/sysadmin/.cache/deno /home/sysadmin/.local/src/development/dg-website
+
+[Install]
+WantedBy=multi-user.target

@@ -33,6 +33,21 @@ traffic for `denogenesis.com`:
 deno task start
 ```
 
+Install the systemd service on the VPS:
+
+```sh
+sudo cp deploy/systemd/denogenesis.service /etc/systemd/system/denogenesis.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now denogenesis.service
+sudo systemctl status denogenesis.service
+```
+
+Read service logs:
+
+```sh
+journalctl -u denogenesis.service -f
+```
+
 Install the reverse proxy:
 
 ```sh
@@ -62,6 +77,8 @@ The server follows a small, composable shape:
   allowlist of public files.
 - `src/app.ts` assembles the health route, static file route, security headers,
   method guard, and request logging.
+- `deploy/systemd/denogenesis.service` runs the Deno app from
+  `/home/sysadmin/.local/src/development/dg-website` as the `sysadmin` user.
 - `deploy/nginx/denogenesis.com.conf` reverse proxies `denogenesis.com` and
   `www.denogenesis.com` to the Deno process at `127.0.0.1:8004`.
 
