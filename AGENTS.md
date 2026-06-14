@@ -7,6 +7,8 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 - Runtime: Deno 2.x.
 - HTTP dependency: JSR `@std/http`.
 - Public routes: `/`, `/index.html`, `/main.css`, `/script.js`, and `/healthz`.
+- Default app bind: `127.0.0.1:8004`.
+- Public site: `denogenesis.com`, proxied by Nginx to `127.0.0.1:8004`.
 - Server entrypoint: `main.ts`.
 - Frontend assets remain at the repo root because they predate the Deno wrapper.
 
@@ -17,6 +19,7 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 - `src/http.ts` contains composable request handlers and middleware.
 - `src/static.ts` maps public paths to an explicit asset allowlist.
 - `src/app.ts` assembles the app from the small functions above.
+- `deploy/nginx/denogenesis.com.conf` contains the production reverse proxy.
 
 Keep additions small, explicit, and composable. Prefer one function that does
 one job over shared state or hidden framework behavior.

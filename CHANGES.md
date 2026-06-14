@@ -5,12 +5,14 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 ## [Unreleased]
 
 ### Added
+- Nginx reverse proxy config for `denogenesis.com` targeting the Deno app on `127.0.0.1:8004`.
 - Deno web app entrypoint using JSR `@std/http/file-server` for the existing site assets.
 - Composable server modules for config, HTTP helpers, app assembly, and static asset allowlisting.
 - `AGENTS.md` with AI-agent and human maintenance notes.
 - README runbook covering Deno tasks, routes, metadata, and architecture.
 
 ### Changed
+- Default Deno app port changed to `8004`.
 - Replaced the hero GitHub CTA text with `github repo coming soon!`.
 - Added a promotional link to `https://pedromdominguez.com`.
 - Added HTML metadata for description, author, creator, and robots.

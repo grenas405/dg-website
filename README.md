@@ -14,7 +14,7 @@ and business work is available at https://pedromdominguez.com.
 deno task dev
 ```
 
-The dev task starts the app with file watching on `http://127.0.0.1:8000/`.
+The dev task starts the app with file watching on `http://127.0.0.1:8004/`.
 
 ```sh
 deno task start
@@ -24,6 +24,22 @@ Set `HOST` or `PORT` to override the default bind address:
 
 ```sh
 HOST=0.0.0.0 PORT=8080 deno task start
+```
+
+For production, keep the Deno process on loopback and let Nginx handle public
+traffic for `denogenesis.com`:
+
+```sh
+deno task start
+```
+
+Install the reverse proxy:
+
+```sh
+sudo cp deploy/nginx/denogenesis.com.conf /etc/nginx/sites-available/denogenesis.com
+sudo ln -s /etc/nginx/sites-available/denogenesis.com /etc/nginx/sites-enabled/denogenesis.com
+sudo nginx -t
+sudo systemctl reload nginx
 ```
 
 ## Check
@@ -46,6 +62,8 @@ The server follows a small, composable shape:
   allowlist of public files.
 - `src/app.ts` assembles the health route, static file route, security headers,
   method guard, and request logging.
+- `deploy/nginx/denogenesis.com.conf` reverse proxies `denogenesis.com` and
+  `www.denogenesis.com` to the Deno process at `127.0.0.1:8004`.
 
 Public routes:
 
