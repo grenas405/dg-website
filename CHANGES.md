@@ -4,6 +4,17 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Deno web app entrypoint using JSR `@std/http/file-server` for the existing site assets.
+- Composable server modules for config, HTTP helpers, app assembly, and static asset allowlisting.
+- `AGENTS.md` with AI-agent and human maintenance notes.
+- README runbook covering Deno tasks, routes, metadata, and architecture.
+
+### Changed
+- Replaced the hero GitHub CTA text with `github repo coming soon!`.
+- Added a promotional link to `https://pedromdominguez.com`.
+- Added HTML metadata for description, author, creator, and robots.
+
 ### Fixed
 - Hero title not centered on mobile: added `align-items: center` to `.hero-title` in the `max-width: 900px` media query.
 - Developer note mission statement invisible on scroll: `.dev-note-mission` container was stuck at `opacity: 0` (CSS) while only inner `.char` spans were animated. Added an opacity flush (delay: 900ms) before the typewriter fires, matching the pattern used for `.hero-sub`.

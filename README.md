@@ -1,33 +1,72 @@
-# DenoGenesis | denogenesis.com
+# DenoGenesis
 
-**Democratizing Web Development in Oklahoma City and Beyond.**
+DenoGenesis is a Deno-powered teaser site for democratizing web development in
+Oklahoma City and beyond. The frontend files are intentionally simple:
+`index.html`, `main.css`, and `script.js` remain the source of the visible site,
+while Deno provides the HTTP process around them.
 
-DenoGenesis is a high-performance, open-source web framework designed to simplify modern development while providing industrial-grade reliability. Built for the next generation of creators, it focuses on a local-first philosophy starting right here in the heart of Oklahoma.
+Pedro M. Dominguez is the developer and architect behind the project. Personal
+and business work is available at https://pedromdominguez.com.
 
-## 🚀 The Stack
+## Run
 
-DenoGenesis leverages a rock-solid, modern tech stack:
+```sh
+deno task dev
+```
 
-- **🦕 Deno:** Secure-by-default runtime for modern TypeScript/JavaScript.
-- **🟦 TypeScript:** Type-safe development to eliminate bugs before they start.
-- **🛡️ Nginx:** High-performance reverse proxy for scalable OKC applications.
-- **⚙️ Systemd:** Reliable process management to keep your "Genesis" alive 24/7.
+The dev task starts the app with file watching on `http://127.0.0.1:8000/`.
 
-## ✨ Teaser Site Features
+```sh
+deno task start
+```
 
-The current frontend serves as a teaser for the upcoming framework launch:
+Set `HOST` or `PORT` to override the default bind address:
 
-- **Anime.js Animations:** Engaging entrance sequences, floating visuals, and interactive hover states.
-- **Custom Cursor:** Smooth, modern mouse-follower for an immersive experience.
-- **Local Pride:** Dedicated sections highlighting its Oklahoma City roots.
-- **Responsive Design:** Fully optimized for mobile and desktop browsing.
+```sh
+HOST=0.0.0.0 PORT=8080 deno task start
+```
 
-## 👨‍💻 Developed By
+## Check
 
-**Pedro M. Dominguez**  
-The sole developer and visionary behind DenoGenesis. This project is a movement to empower developers with better tools, starting locally and growing globally.
+```sh
+deno task check
+deno task fmt
+deno task lint
+```
 
----
+## Architecture
 
-Built with ❤️ in Oklahoma City.  
-© 2026 DenoGenesis. All rights reserved.
+The server follows a small, composable shape:
+
+- `main.ts` starts Deno and owns process-level concerns.
+- `src/config.ts` reads environment configuration.
+- `src/http.ts` defines request handlers, middleware, routing helpers, and
+  response helpers.
+- `src/static.ts` uses JSR `@std/http/file-server` to serve an explicit
+  allowlist of public files.
+- `src/app.ts` assembles the health route, static file route, security headers,
+  method guard, and request logging.
+
+Public routes:
+
+- `GET /`
+- `GET /index.html`
+- `GET /main.css`
+- `GET /script.js`
+- `GET /healthz`
+
+`HEAD` is allowed for the same paths. Other methods return `405`.
+
+## Content Metadata
+
+- Audience: creators, local builders, and early DenoGenesis followers.
+- Location signal: Oklahoma City, Oklahoma.
+- GitHub status: github repo coming soon!
+- Promotional link: https://pedromdominguez.com
+
+## Agent Notes
+
+See `AGENTS.md` for AI-agent maintenance rules. In short: keep functions
+explicit, prefer composition over shared state, preserve the current frontend
+assets unless a change is intentional, and do not expose new files publicly
+without adding them to the static allowlist.

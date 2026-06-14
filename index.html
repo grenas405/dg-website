@@ -3,6 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="DenoGenesis is a Deno-powered web app for democratizing web development in Oklahoma City and beyond."
+    />
+    <meta name="author" content="Pedro M. Dominguez" />
+    <meta name="creator" content="Pedro M. Dominguez" />
+    <meta name="robots" content="index, follow" />
     <title>DenoGenesis | Democratizing Web Dev in OKC</title>
     <link rel="stylesheet" href="main.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,7 +29,7 @@
       <div class="nav-links">
         <a href="#about" class="nav-link">About</a>
         <a href="#stack" class="nav-link">Stack</a>
-        <a href="#" class="cta-btn">Join Waitlist</a>
+        <a href="#note" class="cta-btn">Join Waitlist</a>
       </div>
     </nav>
 
@@ -40,7 +47,14 @@
           </p>
           <div class="hero-btns">
             <button class="primary-btn">Explore the Genesis</button>
-            <button class="secondary-btn">View on GitHub</button>
+            <button
+              class="secondary-btn repo-status"
+              type="button"
+              aria-disabled="true"
+              disabled
+            >
+              github repo coming soon!
+            </button>
           </div>
         </div>
 
@@ -90,7 +104,7 @@
         </div>
       </section>
 
-      <section class="okc-pride">
+      <section id="about" class="okc-pride">
         <div class="okc-content">
           <h2>Built in OKC.</h2>
           <p>
@@ -98,6 +112,14 @@
             just a framework; it's a movement to democratize technology in the
             heart of Oklahoma and beyond.
           </p>
+          <a
+            class="personal-site-link"
+            href="https://pedromdominguez.com"
+            target="_blank"
+            rel="me noopener noreferrer"
+          >
+            Work with Pedro at pedromdominguez.com
+          </a>
         </div>
       </section>
 

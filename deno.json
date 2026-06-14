@@ -1,0 +1,27 @@
+{
+  "tasks": {
+    "check": "deno check main.ts",
+    "dev": "deno run --allow-net --allow-read --allow-env=HOST,PORT --watch main.ts",
+    "fmt": "deno fmt",
+    "lint": "deno lint",
+    "start": "deno run --allow-net --allow-read --allow-env=HOST,PORT main.ts"
+  },
+  "fmt": {
+    "include": [
+      "deno.json",
+      "main.ts",
+      "src/",
+      "README.md",
+      "AGENTS.md"
+    ]
+  },
+  "lint": {
+    "include": [
+      "main.ts",
+      "src/"
+    ]
+  },
+  "imports": {
+    "@std/http/file-server": "jsr:@std/http@^1.1.1/file-server"
+  }
+}
