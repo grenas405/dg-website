@@ -4,6 +4,14 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 
 ## [Unreleased]
 
+### Security
+- Strict `Content-Security-Policy` scoped to the site's real dependencies (cdnjs for anime.js, Google Fonts) with no `unsafe-inline`/`unsafe-eval`, plus `frame-ancestors 'none'`, `object-src 'none'`, and `base-uri 'self'`.
+- Added `Permissions-Policy` denying unused browser features, `Cross-Origin-Opener-Policy`, and `Cross-Origin-Resource-Policy`.
+- `Strict-Transport-Security` emitted only when the edge forwards `X-Forwarded-Proto: https`, so HTTPS is pinned in production without affecting plain-HTTP local testing.
+- `src/static.ts` now sets `showDotfiles: false` and `showDirListing: false` explicitly, so dotfiles (`.env`, `.git`) and directory indexes are never served from `public/`.
+- Nginx hardening: `server_tokens off`, `client_max_body_size 16k`, per-IP rate limiting (`limit_req`), and `limit_except GET HEAD` to reject unsafe methods at the edge.
+- Added `src/http_test.ts` covering the security headers, CSP contents, conditional HSTS, and the method guard; new `deno task test`.
+
 ### Added
 - Systemd service unit for running the Deno app from `/home/sysadmin/.local/src/development/dg-website` on the VPS.
 - Nginx reverse proxy config for `denogenesis.com` targeting the Deno app on `127.0.0.1:8004`.

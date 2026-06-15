@@ -63,7 +63,27 @@ sudo systemctl reload nginx
 deno task check
 deno task fmt
 deno task lint
+deno task test
 ```
+
+## Security
+
+The app follows OWASP secure-defaults for a static site:
+
+- A strict `Content-Security-Policy` allows only the origins the site uses
+  (`cdnjs.cloudflare.com` for anime.js, Google Fonts) with no `unsafe-inline` or
+  `unsafe-eval`. Adding an inline `<script>`/`<style>` or a new CDN requires
+  updating the policy in `src/http.ts`.
+- `Permissions-Policy`, `Referrer-Policy`, `X-Content-Type-Options: nosniff`,
+  `X-Frame-Options: DENY`, `Cross-Origin-Opener-Policy`, and
+  `Cross-Origin-Resource-Policy` are set on every response.
+- `Strict-Transport-Security` is sent only when the request was forwarded over
+  HTTPS (`X-Forwarded-Proto: https`), so it activates automatically once TLS is
+  terminated at Nginx.
+- `serveDir` runs with `showDotfiles: false` and `showDirListing: false`, so
+  dotfiles and directory indexes are never exposed from `public/`.
+- Nginx adds `server_tokens off`, a request-body cap, per-IP rate limiting, and
+  rejects non-`GET`/`HEAD` methods at the edge.
 
 ## Architecture
 
@@ -71,8 +91,8 @@ The server follows a small, composable shape:
 
 - `main.ts` starts Deno and owns process-level concerns.
 - `src/config.ts` reads environment configuration.
-- `src/http.ts` defines request handlers, middleware, routing helpers, and
-  response helpers.
+- `src/http.ts` defines request handlers, middleware (including the security
+  headers and method guard), routing helpers, and response helpers.
 - `src/static.ts` uses JSR `@std/http/file-server` `serveDir` to serve the
   `public/` directory directly via `fsRoot`.
 - `src/app.ts` assembles the health route, static file route, security headers,

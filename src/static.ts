@@ -8,5 +8,9 @@ export function servePublicFiles(siteRoot: URL): Handler {
     serveDir(request, {
       fsRoot,
       quiet: true,
+      // Explicit hardening: never serve dotfiles (e.g. .env, .git) and never
+      // expose a browsable directory index now that public/ is the boundary.
+      showDotfiles: false,
+      showDirListing: false,
     });
 }
