@@ -1,12 +1,13 @@
 {
   "tasks": {
     "check": "deno check main.ts",
-    "dev": "deno run --allow-net --allow-read=. --allow-env=HOST,PORT --watch main.ts",
+    "dev": "deno run --allow-net --allow-read=. --allow-write=data --allow-env=HOST,PORT,KV_PATH --watch main.ts",
     "fmt": "deno fmt",
     "lint": "deno lint",
-    "start": "deno run --allow-net --allow-read=public --allow-env=HOST,PORT main.ts",
+    "start": "deno run --allow-net --allow-read=public,data --allow-write=data --allow-env=HOST,PORT,KV_PATH main.ts",
     "test": "deno test"
   },
+  "unstable": ["kv"],
   "fmt": {
     "include": [
       "deno.json",

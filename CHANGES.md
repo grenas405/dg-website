@@ -5,6 +5,7 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 ## [Unreleased]
 
 ### Security
+- The waitlist write path is the only place `POST` is allowed. The app permits `POST` solely on `/api/waitlist` (static and `/healthz` stay `GET`/`HEAD`), and Nginx restricts `POST` to a dedicated `location /api/` with a tighter rate limit (`2r/s`) and a `2k` body cap. Deno write access is scoped to `--allow-write=data` (the KV directory only).
 - Scoped Deno read permissions: the `start` task now runs with `--allow-read=public` (only the served directory) and `dev` with `--allow-read=.`, replacing unrestricted `--allow-read`. Module/config loading is runtime-privileged and unaffected, so the running process can no longer read anything outside `public/` — an OS-level backstop to the path-traversal gate. The scope is relative to `deno.json`, so it stays location-independent.
 - Explicit path-traversal containment gate in `src/static.ts` using `@std/path` (`resolve` + `SEPARATOR`): the request path is decoded, resolved against the root, and must stay within it before `serveDir` runs. Catches `..`, percent-encoded (`%2e%2e`, `%2f`), NUL-byte, and malformed-encoding attempts as defense-in-depth on top of `serveDir`. Covered by `src/static_test.ts`.
 - Strict `Content-Security-Policy` scoped to the site's real dependencies (cdnjs for anime.js, Google Fonts) with no `unsafe-inline`/`unsafe-eval`, plus `frame-ancestors 'none'`, `object-src 'none'`, and `base-uri 'self'`.
@@ -15,6 +16,9 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 - Added `src/http_test.ts` covering the security headers, CSP contents, conditional HSTS, and the method guard; new `deno task test`.
 
 ### Added
+- **Waitlist backed by Deno KV.** New `src/waitlist.ts` stores founding-member signups in Deno KV with atomic, retry-with-backoff position assignment (concurrent joins never reuse a position), per-email idempotency, email validation, and a honeypot field. Exposed at `POST /api/waitlist` (join → `{status, position, total}`) and `GET /api/waitlist` (live count). Covered by `src/waitlist_test.ts` (20 cases incl. a 25-way concurrency stress test using an in-memory KV).
+- **Cinematic landing redesign.** Hero gains a launch badge and a live countdown to the Autumn 2026 launch (mono tabular digits with per-tick animation). A new waitlist section with an animated submit/spinner, drawn-SVG success state showing your cohort position, inline validation, and a live social-proof count. Added a filmic vignette overlay and `prefers-reduced-motion` fallbacks throughout. Loaded JetBrains Mono for the countdown/labels.
+- `json()` response helper in `src/http.ts`.
 - Systemd service unit for running the Deno app from `/home/sysadmin/.local/src/development/dg-website` on the VPS.
 - Nginx reverse proxy config for `denogenesis.com` targeting the Deno app on `127.0.0.1:8004`.
 - Deno web app entrypoint using JSR `@std/http/file-server` for the existing site assets.

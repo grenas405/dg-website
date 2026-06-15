@@ -1,0 +1,3 @@
+# Deno KV store (runtime data — never commit)
+/data/*
+!/data/.gitkeep

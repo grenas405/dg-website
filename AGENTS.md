@@ -6,8 +6,10 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 
 - Runtime: Deno 2.x.
 - HTTP dependency: JSR `@std/http`.
-- Public routes: `/healthz`, plus any file under `public/` (`/`, `/index.html`,
-  `/main.css`, `/script.js`).
+- Public routes: `/healthz`, `/api/waitlist` (GET count, POST join), plus any
+  file under `public/` (`/`, `/index.html`, `/main.css`, `/script.js`).
+- Persistence: Deno KV (`src/waitlist.ts`), default `./data/waitlist.db`,
+  overridable via `KV_PATH`. `kv` unstable flag is set in `deno.json`.
 - Default app bind: `127.0.0.1:8004`.
 - Public site: `denogenesis.com`, proxied by Nginx to `127.0.0.1:8004`.
 - VPS repo path: `/home/sysadmin/.local/src/development/dg-website`.
@@ -16,11 +18,12 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 
 ## Architecture
 
-- `main.ts` starts the process and does no request handling.
-- `src/config.ts` reads `HOST` and `PORT`.
+- `main.ts` starts the process, opens Deno KV, and does no request handling.
+- `src/config.ts` reads `HOST`, `PORT`, and `KV_PATH`.
 - `src/http.ts` contains composable request handlers and middleware.
 - `src/static.ts` serves the `public/` directory via `serveDir` `fsRoot`, gated
   by an explicit `@std/path` traversal check (`isPathWithinRoot`).
+- `src/waitlist.ts` holds the Deno KV waitlist store and its HTTP handlers.
 - `src/app.ts` assembles the app from the small functions above.
 - `deploy/nginx/denogenesis.com.conf` contains the production reverse proxy.
 - `deploy/systemd/denogenesis.service` contains the production systemd service.
@@ -45,9 +48,14 @@ one job over shared state or hidden framework behavior.
 - `src/static.ts` gates every request through `isPathWithinRoot` before
   `serveDir`; keep that check (and its tests) in place — it is the explicit
   path-traversal boundary.
-- The `start` task reads only `public/` (`--allow-read=public`). If the app ever
-  needs to read another path at runtime, widen this deliberately rather than
-  reverting to unrestricted `--allow-read`.
+- The `start` task reads only `public/` and `data/` and writes only `data/`
+  (`--allow-read=public,data --allow-write=data`). If the app ever needs another
+  path at runtime, widen this deliberately rather than reverting to unrestricted
+  flags.
+- `POST` is allowed only on `/api/waitlist`. Static assets and `/healthz` stay
+  `GET`/`HEAD`. Keep new write endpoints under `/api/` so the Nginx
+  `location
+  /api/` rate limit and body cap apply.
 - Run `deno task test` after touching `src/http.ts` or `src/static.ts`.
 
 ## Content Rules

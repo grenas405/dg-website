@@ -88,6 +88,9 @@ The app follows OWASP secure-defaults for a static site:
   before `serveDir` runs.
 - Nginx adds `server_tokens off`, a request-body cap, per-IP rate limiting, and
   rejects non-`GET`/`HEAD` methods at the edge.
+- `POST` is permitted only on `/api/waitlist` (app) and a dedicated Nginx
+  `location /api/` with a tighter rate limit and a `2k` body cap. Deno write
+  access is scoped to the KV directory (`--allow-write=data`).
 - The `start` task runs with `--allow-read=public` so the process can only read
   the served directory (module/config loading is runtime-privileged and
   unaffected). This is an OS-level backstop to the traversal gate. The scope is
@@ -103,8 +106,10 @@ The server follows a small, composable shape:
   headers and method guard), routing helpers, and response helpers.
 - `src/static.ts` uses JSR `@std/http/file-server` `serveDir` to serve the
   `public/` directory directly via `fsRoot`.
-- `src/app.ts` assembles the health route, static file route, security headers,
-  method guard, and request logging.
+- `src/waitlist.ts` stores founding-member signups in Deno KV and exposes the
+  `/api/waitlist` join (`POST`) and count (`GET`) handlers.
+- `src/app.ts` assembles the health route, waitlist route, static file route,
+  security headers, method guard, and request logging.
 - `deploy/systemd/denogenesis.service` runs the Deno app from
   `/home/sysadmin/.local/src/development/dg-website` as the `sysadmin` user.
 - `deploy/nginx/denogenesis.com.conf` reverse proxies `denogenesis.com` and
@@ -115,8 +120,21 @@ Public routes:
 - `GET /healthz`
 - `GET /` and any file under `public/` (e.g. `/index.html`, `/main.css`,
   `/script.js`), served directly from the `public/` directory.
+- `GET /api/waitlist` — returns the current waitlist count as JSON.
+- `POST /api/waitlist` — joins the waitlist with a JSON `{ "email": "..." }`
+  body; returns `{ status, position, total }`.
 
-`HEAD` is allowed for the same paths. Other methods return `405`.
+`HEAD` is allowed for the read paths. `POST` is allowed only on `/api/waitlist`.
+Other methods return `405`.
+
+## Waitlist (Deno KV)
+
+The waitlist persists to Deno KV (`src/waitlist.ts`). The store path defaults to
+`./data/waitlist.db` and is overridable with `KV_PATH`. Positions are assigned
+atomically with optimistic retry, so concurrent signups never collide, and joins
+are idempotent per email. The KV data directory is git-ignored. The `start` task
+grants `--allow-write=data` (and reads `public,data`) and enables the `kv`
+unstable flag via `deno.json`.
 
 ## Content Metadata
 

@@ -1,6 +1,6 @@
 import { serveDir } from "@std/http/file-server";
 import { resolve, SEPARATOR } from "@std/path";
-import { type Handler, notFound } from "./http.ts";
+import { type Handler, methodNotAllowed, notFound } from "./http.ts";
 
 /**
  * Resolve a request pathname against `root` and confirm it cannot escape it.
@@ -39,6 +39,10 @@ export function servePublicFiles(siteRoot: URL): Handler {
   const fsRoot = resolve(decodeURIComponent(siteRoot.pathname));
 
   return (request) => {
+    if (request.method !== "GET" && request.method !== "HEAD") {
+      return methodNotAllowed(["GET", "HEAD"]);
+    }
+
     const pathname = new URL(request.url).pathname;
 
     if (!isPathWithinRoot(fsRoot, pathname)) {

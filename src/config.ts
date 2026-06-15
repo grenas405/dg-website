@@ -6,6 +6,7 @@ export type ServerConfig = {
   hostname: string;
   port: number;
   siteRoot: URL;
+  kvPath: string;
 };
 
 export function parsePort(value: string | undefined, fallback: number): number {
@@ -25,5 +26,6 @@ export function readConfig(env: EnvReader = Deno.env): ServerConfig {
     hostname: env.get("HOST") ?? "127.0.0.1",
     port: parsePort(env.get("PORT"), 8004),
     siteRoot: new URL("../public/", import.meta.url),
+    kvPath: env.get("KV_PATH") ?? "./data/waitlist.db",
   };
 }

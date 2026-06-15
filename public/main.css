@@ -1391,3 +1391,498 @@ footer p:hover {
     font-size: 1rem;
   }
 }
+
+/* ============================================================
+   CINEMATIC LAYER — launch countdown, vignette, waitlist
+   ============================================================ */
+
+/* Vignette: darken the frame edges for a filmic, focused stage. */
+.cinematic-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    130% 100% at 50% 42%,
+    transparent 55%,
+    rgba(2, 2, 8, 0.55) 100%
+  );
+  mix-blend-mode: multiply;
+}
+
+/* --- Launch badge ------------------------------------------------ */
+.launch-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.95rem;
+  margin-bottom: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--okc-gold);
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 30px -10px var(--okc-sunset-glow);
+}
+
+.launch-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--okc-gold);
+  box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.6);
+  animation: launch-pulse 2.2s ease-out infinite;
+}
+
+@keyframes launch-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+  }
+}
+
+/* --- Hero countdown --------------------------------------------- */
+.hero-countdown {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.85rem;
+  margin: 2rem 0 2.4rem;
+  opacity: 0;
+}
+
+.cd-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4.4rem;
+  padding: 0.85rem 0.6rem 0.65rem;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.cd-unit::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent-glow),
+    transparent
+  );
+}
+
+.cd-value {
+  font-family: var(--font-mono);
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  text-shadow: 0 0 22px rgba(240, 240, 250, 0.12);
+}
+
+.cd-key {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.cd-sep {
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--fg-subtle);
+  padding-bottom: 1.4rem;
+  animation: cd-blink 1.6s steps(1) infinite;
+}
+
+@keyframes cd-blink {
+  0%,
+  50% {
+    opacity: 0.7;
+  }
+  51%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+/* tick pop when a value changes (toggled from JS) */
+.cd-value.tick {
+  animation: cd-tick 0.5s var(--spring);
+}
+
+@keyframes cd-tick {
+  0% {
+    transform: translateY(-30%);
+    opacity: 0.2;
+    color: var(--accent);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   WAITLIST
+   ============================================================ */
+.waitlist {
+  position: relative;
+  padding: 8rem 2rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.waitlist-aura {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      48% 60% at 50% 18%,
+      var(--secondary-dim),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 50% at 76% 80%,
+      rgba(249, 115, 22, 0.08),
+      transparent 70%
+    ),
+    radial-gradient(36% 46% at 22% 72%, var(--accent-dim), transparent 70%);
+  animation: aura-breathe 9s ease-in-out infinite alternate;
+}
+
+@keyframes aura-breathe {
+  from {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+.waitlist-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.waitlist-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--okc-gold);
+  margin-bottom: 1.4rem;
+}
+
+.eyebrow-mark {
+  animation: ornament-rotate 9s linear infinite;
+  display: inline-block;
+}
+
+.waitlist-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.2rem;
+}
+
+.waitlist-title em {
+  font-style: italic;
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.waitlist-lede {
+  color: var(--fg-muted);
+  font-size: clamp(1rem, 2.2vw, 1.12rem);
+  line-height: 1.65;
+  max-width: 52ch;
+  margin: 0 auto 2.6rem;
+}
+
+/* --- Form ------------------------------------------------------- */
+.waitlist-form {
+  margin: 0 auto;
+  max-width: 520px;
+}
+
+.waitlist-field {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.5rem;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.waitlist-field:focus-within {
+  border-color: var(--accent-glow);
+  box-shadow: 0 0 0 4px var(--accent-dim), 0 0 40px -12px var(--accent-glow-lg);
+}
+
+.waitlist-field input[type="email"] {
+  flex: 1;
+  min-width: 0;
+  padding: 0.85rem 1.2rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font-family: var(--font-main);
+  font-size: 1rem;
+}
+
+.waitlist-field input[type="email"]::placeholder {
+  color: var(--fg-subtle);
+}
+
+/* Honeypot: visually and semantically removed for real users. */
+.waitlist-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.waitlist-submit {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.7rem;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-okc);
+  color: #050510;
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform var(--transition-fast), filter var(--transition-fast),
+    opacity var(--transition-fast);
+  background-size: 180% 180%;
+  animation: gradient-shift 6s ease infinite;
+}
+
+.waitlist-submit:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.waitlist-submit:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.waitlist-submit:disabled {
+  cursor: progress;
+  opacity: 0.85;
+}
+
+.submit-spinner {
+  display: none;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(5, 5, 16, 0.35);
+  border-top-color: #050510;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.waitlist-submit.is-loading .submit-spinner {
+  display: inline-block;
+}
+
+.waitlist-submit.is-loading .submit-label {
+  opacity: 0.55;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.waitlist-msg {
+  min-height: 1.3rem;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  transition: color var(--transition-fast);
+}
+
+.waitlist-msg.is-error {
+  color: var(--pink);
+}
+
+.waitlist-field.is-error {
+  border-color: var(--pink-glow);
+  box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.1);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* --- Success state ---------------------------------------------- */
+.waitlist-success {
+  margin: 0 auto;
+  max-width: 480px;
+  padding: 2.4rem 2rem;
+  background: var(--glass);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 60px -20px var(--accent-glow-lg);
+}
+
+.success-mark {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.success-ring {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-dasharray: 145;
+  stroke-dashoffset: 145;
+  animation: draw 0.6s ease forwards;
+}
+
+.success-check {
+  stroke: var(--accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: draw 0.4s 0.45s ease forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.success-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.success-text {
+  color: var(--fg-muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.success-position {
+  margin-top: 1.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--okc-gold);
+}
+
+.success-position strong {
+  font-size: 1.4rem;
+  color: var(--fg);
+}
+
+/* --- Social proof ---------------------------------------------- */
+.waitlist-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 2.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-subtle);
+}
+
+.proof-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+  animation: dot-blink 2s ease-in-out infinite;
+}
+
+@media (max-width: 600px) {
+  .hero-countdown {
+    gap: 0.4rem;
+  }
+  .cd-unit {
+    min-width: 0;
+    flex: 1;
+    padding: 0.7rem 0.3rem 0.55rem;
+  }
+  .cd-sep {
+    display: none;
+  }
+  .waitlist {
+    padding: 5.5rem 1.3rem;
+  }
+  .waitlist-field {
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+  }
+  .waitlist-submit {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .launch-dot,
+  .eyebrow-mark,
+  .cd-sep,
+  .waitlist-aura,
+  .waitlist-submit,
+  .proof-dot {
+    animation: none;
+  }
+  .hero-countdown {
+    opacity: 1;
+  }
+}

@@ -3,7 +3,8 @@ import { readConfig } from "./src/config.ts";
 
 if (import.meta.main) {
   const config = readConfig();
-  const app = createApp(config.siteRoot);
+  const kv = await Deno.openKv(config.kvPath);
+  const app = createApp(config.siteRoot, kv);
 
   console.log(
     `DenoGenesis listening on http://${config.hostname}:${config.port}/`,
