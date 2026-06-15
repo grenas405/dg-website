@@ -88,6 +88,10 @@ The app follows OWASP secure-defaults for a static site:
   before `serveDir` runs.
 - Nginx adds `server_tokens off`, a request-body cap, per-IP rate limiting, and
   rejects non-`GET`/`HEAD` methods at the edge.
+- The `start` task runs with `--allow-read=public` so the process can only read
+  the served directory (module/config loading is runtime-privileged and
+  unaffected). This is an OS-level backstop to the traversal gate. The scope is
+  relative to `deno.json`, so it is independent of where the repo is deployed.
 
 ## Architecture
 

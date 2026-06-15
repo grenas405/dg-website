@@ -5,6 +5,7 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 ## [Unreleased]
 
 ### Security
+- Scoped Deno read permissions: the `start` task now runs with `--allow-read=public` (only the served directory) and `dev` with `--allow-read=.`, replacing unrestricted `--allow-read`. Module/config loading is runtime-privileged and unaffected, so the running process can no longer read anything outside `public/` — an OS-level backstop to the path-traversal gate. The scope is relative to `deno.json`, so it stays location-independent.
 - Explicit path-traversal containment gate in `src/static.ts` using `@std/path` (`resolve` + `SEPARATOR`): the request path is decoded, resolved against the root, and must stay within it before `serveDir` runs. Catches `..`, percent-encoded (`%2e%2e`, `%2f`), NUL-byte, and malformed-encoding attempts as defense-in-depth on top of `serveDir`. Covered by `src/static_test.ts`.
 - Strict `Content-Security-Policy` scoped to the site's real dependencies (cdnjs for anime.js, Google Fonts) with no `unsafe-inline`/`unsafe-eval`, plus `frame-ancestors 'none'`, `object-src 'none'`, and `base-uri 'self'`.
 - Added `Permissions-Policy` denying unused browser features, `Cross-Origin-Opener-Policy`, and `Cross-Origin-Resource-Policy`.

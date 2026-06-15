@@ -45,6 +45,9 @@ one job over shared state or hidden framework behavior.
 - `src/static.ts` gates every request through `isPathWithinRoot` before
   `serveDir`; keep that check (and its tests) in place — it is the explicit
   path-traversal boundary.
+- The `start` task reads only `public/` (`--allow-read=public`). If the app ever
+  needs to read another path at runtime, widen this deliberately rather than
+  reverting to unrestricted `--allow-read`.
 - Run `deno task test` after touching `src/http.ts` or `src/static.ts`.
 
 ## Content Rules
