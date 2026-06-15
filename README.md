@@ -82,6 +82,10 @@ The app follows OWASP secure-defaults for a static site:
   terminated at Nginx.
 - `serveDir` runs with `showDotfiles: false` and `showDirListing: false`, so
   dotfiles and directory indexes are never exposed from `public/`.
+- An explicit path-traversal gate (`isPathWithinRoot` in `src/static.ts`, built
+  on `@std/path`) decodes and resolves each request path and rejects anything
+  that would escape `public/` — including `..` and percent-encoded variants —
+  before `serveDir` runs.
 - Nginx adds `server_tokens off`, a request-body cap, per-IP rate limiting, and
   rejects non-`GET`/`HEAD` methods at the edge.
 

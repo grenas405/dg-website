@@ -5,6 +5,7 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 ## [Unreleased]
 
 ### Security
+- Explicit path-traversal containment gate in `src/static.ts` using `@std/path` (`resolve` + `SEPARATOR`): the request path is decoded, resolved against the root, and must stay within it before `serveDir` runs. Catches `..`, percent-encoded (`%2e%2e`, `%2f`), NUL-byte, and malformed-encoding attempts as defense-in-depth on top of `serveDir`. Covered by `src/static_test.ts`.
 - Strict `Content-Security-Policy` scoped to the site's real dependencies (cdnjs for anime.js, Google Fonts) with no `unsafe-inline`/`unsafe-eval`, plus `frame-ancestors 'none'`, `object-src 'none'`, and `base-uri 'self'`.
 - Added `Permissions-Policy` denying unused browser features, `Cross-Origin-Opener-Policy`, and `Cross-Origin-Resource-Policy`.
 - `Strict-Transport-Security` emitted only when the edge forwards `X-Forwarded-Proto: https`, so HTTPS is pinned in production without affecting plain-HTTP local testing.

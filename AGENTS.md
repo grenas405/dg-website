@@ -19,7 +19,8 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 - `main.ts` starts the process and does no request handling.
 - `src/config.ts` reads `HOST` and `PORT`.
 - `src/http.ts` contains composable request handlers and middleware.
-- `src/static.ts` serves the `public/` directory via `serveDir` `fsRoot`.
+- `src/static.ts` serves the `public/` directory via `serveDir` `fsRoot`, gated
+  by an explicit `@std/path` traversal check (`isPathWithinRoot`).
 - `src/app.ts` assembles the app from the small functions above.
 - `deploy/nginx/denogenesis.com.conf` contains the production reverse proxy.
 - `deploy/systemd/denogenesis.service` contains the production systemd service.
@@ -41,6 +42,9 @@ one job over shared state or hidden framework behavior.
   that way.
 - HSTS is conditional on `X-Forwarded-Proto: https`; do not make it
   unconditional.
+- `src/static.ts` gates every request through `isPathWithinRoot` before
+  `serveDir`; keep that check (and its tests) in place — it is the explicit
+  path-traversal boundary.
 - Run `deno task test` after touching `src/http.ts` or `src/static.ts`.
 
 ## Content Rules
