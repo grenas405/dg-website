@@ -13,6 +13,9 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 - README runbook covering Deno tasks, routes, metadata, and architecture.
 
 ### Changed
+- Moved frontend assets (`index.html`, `main.css`, `script.js`) into a `public/` directory.
+- Replaced the explicit static-file allowlist in `src/static.ts` with `@std/http/file-server` `serveDir` serving `public/` via `fsRoot`, so new assets are served without code changes.
+- Pointed `siteRoot` in `src/config.ts` at `../public/`.
 - Default Deno app port changed to `8004`.
 - Replaced the hero GitHub CTA text with `github repo coming soon!`.
 - Added a promotional link to `https://pedromdominguez.com`.

@@ -2,8 +2,8 @@
 
 DenoGenesis is a Deno-powered teaser site for democratizing web development in
 Oklahoma City and beyond. The frontend files are intentionally simple:
-`index.html`, `main.css`, and `script.js` remain the source of the visible site,
-while Deno provides the HTTP process around them.
+`public/index.html`, `public/main.css`, and `public/script.js` remain the source
+of the visible site, while Deno provides the HTTP process around them.
 
 Pedro M. Dominguez is the developer and architect behind the project. Personal
 and business work is available at https://pedromdominguez.com.
@@ -73,8 +73,8 @@ The server follows a small, composable shape:
 - `src/config.ts` reads environment configuration.
 - `src/http.ts` defines request handlers, middleware, routing helpers, and
   response helpers.
-- `src/static.ts` uses JSR `@std/http/file-server` to serve an explicit
-  allowlist of public files.
+- `src/static.ts` uses JSR `@std/http/file-server` `serveDir` to serve the
+  `public/` directory directly via `fsRoot`.
 - `src/app.ts` assembles the health route, static file route, security headers,
   method guard, and request logging.
 - `deploy/systemd/denogenesis.service` runs the Deno app from
@@ -84,11 +84,9 @@ The server follows a small, composable shape:
 
 Public routes:
 
-- `GET /`
-- `GET /index.html`
-- `GET /main.css`
-- `GET /script.js`
 - `GET /healthz`
+- `GET /` and any file under `public/` (e.g. `/index.html`, `/main.css`,
+  `/script.js`), served directly from the `public/` directory.
 
 `HEAD` is allowed for the same paths. Other methods return `405`.
 
@@ -103,5 +101,5 @@ Public routes:
 
 See `AGENTS.md` for AI-agent maintenance rules. In short: keep functions
 explicit, prefer composition over shared state, preserve the current frontend
-assets unless a change is intentional, and do not expose new files publicly
-without adding them to the static allowlist.
+assets unless a change is intentional, and remember that every file placed in
+`public/` is served publicly.

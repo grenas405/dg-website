@@ -6,19 +6,20 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 
 - Runtime: Deno 2.x.
 - HTTP dependency: JSR `@std/http`.
-- Public routes: `/`, `/index.html`, `/main.css`, `/script.js`, and `/healthz`.
+- Public routes: `/healthz`, plus any file under `public/` (`/`, `/index.html`,
+  `/main.css`, `/script.js`).
 - Default app bind: `127.0.0.1:8004`.
 - Public site: `denogenesis.com`, proxied by Nginx to `127.0.0.1:8004`.
 - VPS repo path: `/home/sysadmin/.local/src/development/dg-website`.
 - Server entrypoint: `main.ts`.
-- Frontend assets remain at the repo root because they predate the Deno wrapper.
+- Frontend assets live in `public/` and are served directly via `fsRoot`.
 
 ## Architecture
 
 - `main.ts` starts the process and does no request handling.
 - `src/config.ts` reads `HOST` and `PORT`.
 - `src/http.ts` contains composable request handlers and middleware.
-- `src/static.ts` maps public paths to an explicit asset allowlist.
+- `src/static.ts` serves the `public/` directory via `serveDir` `fsRoot`.
 - `src/app.ts` assembles the app from the small functions above.
 - `deploy/nginx/denogenesis.com.conf` contains the production reverse proxy.
 - `deploy/systemd/denogenesis.service` contains the production systemd service.
