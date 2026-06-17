@@ -16,6 +16,7 @@ All notable changes to the DenoGenesis frontend will be documented in this file.
 - Added `src/http_test.ts` covering the security headers, CSP contents, conditional HSTS, and the method guard; new `deno task test`.
 
 ### Added
+- `public/robots.txt` and `public/sitemap.xml` for crawler discovery of `https://denogenesis.com/`.
 - **Waitlist backed by Deno KV.** New `src/waitlist.ts` stores founding-member signups in Deno KV with atomic, retry-with-backoff position assignment (concurrent joins never reuse a position), per-email idempotency, email validation, and a honeypot field. Exposed at `POST /api/waitlist` (join → `{status, position, total}`) and `GET /api/waitlist` (live count). Covered by `src/waitlist_test.ts` (20 cases incl. a 25-way concurrency stress test using an in-memory KV).
 - **Cinematic landing redesign.** Hero gains a launch badge and a live countdown to the Autumn 2026 launch (mono tabular digits with per-tick animation). A new waitlist section with an animated submit/spinner, drawn-SVG success state showing your cohort position, inline validation, and a live social-proof count. Added a filmic vignette overlay and `prefers-reduced-motion` fallbacks throughout. Loaded JetBrains Mono for the countdown/labels.
 - `json()` response helper in `src/http.ts`.

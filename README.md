@@ -119,7 +119,8 @@ Public routes:
 
 - `GET /healthz`
 - `GET /` and any file under `public/` (e.g. `/index.html`, `/main.css`,
-  `/script.js`), served directly from the `public/` directory.
+  `/script.js`, `/robots.txt`, `/sitemap.xml`), served directly from the
+  `public/` directory.
 - `GET /api/waitlist` — returns the current waitlist count as JSON.
 - `POST /api/waitlist` — joins the waitlist with a JSON `{ "email": "..." }`
   body; returns `{ status, position, total }`.

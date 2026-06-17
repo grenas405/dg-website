@@ -7,7 +7,8 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 - Runtime: Deno 2.x.
 - HTTP dependency: JSR `@std/http`.
 - Public routes: `/healthz`, `/api/waitlist` (GET count, POST join), plus any
-  file under `public/` (`/`, `/index.html`, `/main.css`, `/script.js`).
+  file under `public/` (`/`, `/index.html`, `/main.css`, `/script.js`,
+  `/robots.txt`, `/sitemap.xml`).
 - Persistence: Deno KV (`src/waitlist.ts`), default `./data/waitlist.db`,
   overridable via `KV_PATH`. `kv` unstable flag is set in `deno.json`.
 - Default app bind: `127.0.0.1:8004`.
