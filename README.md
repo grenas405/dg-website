@@ -105,10 +105,10 @@ The app follows OWASP secure-defaults for a static site:
 - `Permissions-Policy`, `Referrer-Policy`, `X-Content-Type-Options: nosniff`,
   `X-Frame-Options: DENY`, `Cross-Origin-Opener-Policy`, and
   `Cross-Origin-Resource-Policy` are set on every response.
-- Nginx terminates TLS (TLS 1.2/1.3, Mozilla "intermediate" ciphers, OCSP
-  stapling) and 301-redirects all HTTP to HTTPS. `Strict-Transport-Security` is
-  sent by the app only when the request arrives with `X-Forwarded-Proto: https`,
-  so it activates automatically behind the HTTPS proxy.
+- Nginx terminates TLS (TLS 1.2/1.3, Mozilla "intermediate" ciphers) and
+  301-redirects all HTTP to HTTPS. `Strict-Transport-Security` is sent by the
+  app only when the request arrives with `X-Forwarded-Proto: https`, so it
+  activates automatically behind the HTTPS proxy.
 - `serveDir` runs with `showDotfiles: false` and `showDirListing: false`, so
   dotfiles and directory indexes are never exposed from `public/`.
 - An explicit path-traversal gate (`isPathWithinRoot` in `src/static.ts`, built
