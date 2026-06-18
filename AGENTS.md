@@ -12,7 +12,8 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 - Persistence: Deno KV (`src/waitlist.ts`), default `./data/waitlist.db`,
   overridable via `KV_PATH`. `kv` unstable flag is set in `deno.json`.
 - Default app bind: `127.0.0.1:8004`.
-- Public site: `denogenesis.com`, proxied by Nginx to `127.0.0.1:8004`.
+- Public site: `https://denogenesis.com`. Nginx terminates TLS and proxies to
+  `127.0.0.1:8004`; HTTP is 301-redirected to HTTPS.
 - VPS repo path: `/home/sysadmin/.local/src/development/dg-website`.
 - Server entrypoint: `main.ts`.
 - Frontend assets live in `public/` and are served directly via `fsRoot`.

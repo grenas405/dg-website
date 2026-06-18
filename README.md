@@ -48,14 +48,42 @@ Read service logs:
 journalctl -u denogenesis.service -f
 ```
 
-Install the reverse proxy:
+Install the reverse proxy. The shipped config terminates HTTPS, so a certificate
+must exist before `nginx -t` will pass. Prerequisites: DNS A/AAAA records for
+`denogenesis.com` and `www.denogenesis.com` pointing at the VPS, and ports
+80/443 open.
 
-```sh
-sudo cp deploy/nginx/denogenesis.com.conf /etc/nginx/sites-available/denogenesis.com
-sudo ln -s /etc/nginx/sites-available/denogenesis.com /etc/nginx/sites-enabled/denogenesis.com
-sudo nginx -t
-sudo systemctl reload nginx
-```
+1. Obtain the first certificate (brief downtime while certbot binds port 80):
+
+   ```sh
+   sudo mkdir -p /var/www/certbot
+   sudo systemctl stop nginx
+   sudo certbot certonly --standalone \
+     -d denogenesis.com -d www.denogenesis.com \
+     --agree-tos -m pedro.dfedro@gmail.com --no-eff-email
+   ```
+
+2. Deploy the proxy config and start nginx:
+
+   ```sh
+   sudo cp deploy/nginx/denogenesis.com.conf /etc/nginx/sites-available/denogenesis.com
+   sudo ln -sf /etc/nginx/sites-available/denogenesis.com /etc/nginx/sites-enabled/denogenesis.com
+   sudo nginx -t
+   sudo systemctl start nginx
+   ```
+
+3. Switch renewals to the zero-downtime webroot method (the deployed config
+   serves `/.well-known/acme-challenge/` from `/var/www/certbot` over HTTP),
+   then confirm auto-renewal works:
+
+   ```sh
+   sudo certbot certonly --webroot -w /var/www/certbot \
+     -d denogenesis.com -d www.denogenesis.com
+   sudo certbot renew --dry-run
+   ```
+
+HTTP is redirected to HTTPS, and the app emits `Strict-Transport-Security`
+automatically once requests arrive with `X-Forwarded-Proto: https`.
 
 ## Check
 
@@ -77,9 +105,10 @@ The app follows OWASP secure-defaults for a static site:
 - `Permissions-Policy`, `Referrer-Policy`, `X-Content-Type-Options: nosniff`,
   `X-Frame-Options: DENY`, `Cross-Origin-Opener-Policy`, and
   `Cross-Origin-Resource-Policy` are set on every response.
-- `Strict-Transport-Security` is sent only when the request was forwarded over
-  HTTPS (`X-Forwarded-Proto: https`), so it activates automatically once TLS is
-  terminated at Nginx.
+- Nginx terminates TLS (TLS 1.2/1.3, Mozilla "intermediate" ciphers, OCSP
+  stapling) and 301-redirects all HTTP to HTTPS. `Strict-Transport-Security` is
+  sent by the app only when the request arrives with `X-Forwarded-Proto: https`,
+  so it activates automatically behind the HTTPS proxy.
 - `serveDir` runs with `showDotfiles: false` and `showDirListing: false`, so
   dotfiles and directory indexes are never exposed from `public/`.
 - An explicit path-traversal gate (`isPathWithinRoot` in `src/static.ts`, built
