@@ -136,7 +136,8 @@ The server follows a small, composable shape:
 - `src/static.ts` uses JSR `@std/http/file-server` `serveDir` to serve the
   `public/` directory directly via `fsRoot`.
 - `src/waitlist.ts` stores founding-member signups in Deno KV and exposes the
-  `/api/waitlist` join (`POST`) and count (`GET`) handlers.
+  `/api/waitlist` join (`POST`) and count (`GET`) handlers. The `POST` body is
+  validated against a Zod schema (JSR `@zod/zod`) before it reaches the store.
 - `src/app.ts` assembles the health route, waitlist route, static file route,
   security headers, method guard, and request logging.
 - `deploy/systemd/denogenesis.service` runs the Deno app from

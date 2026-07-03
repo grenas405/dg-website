@@ -14,7 +14,8 @@
     "jsr:@std/net@^1.0.6": "1.0.6",
     "jsr:@std/path@1": "1.1.5",
     "jsr:@std/path@^1.1.5": "1.1.5",
-    "jsr:@std/streams@^1.1.1": "1.1.1"
+    "jsr:@std/streams@^1.1.1": "1.1.1",
+    "jsr:@zod/zod@4": "4.4.3"
   },
   "jsr": {
     "@std/assert@1.0.19": {
@@ -69,13 +70,17 @@
     },
     "@std/streams@1.1.1": {
       "integrity": "92556d350e537e9dce527a6d08f6f15be3ff65e656079dea69d15252187c7613"
+    },
+    "@zod/zod@4.4.3": {
+      "integrity": "4712ac0967efaa718b37c36eaffb4e1d4457e1a266aef6efb3ab36f54a6fefe4"
     }
   },
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
       "jsr:@std/http@^1.1.1",
-      "jsr:@std/path@1"
+      "jsr:@std/path@1",
+      "jsr:@zod/zod@4"
     ]
   }
 }

@@ -6,6 +6,8 @@ This repository is a Deno web app for the DenoGenesis teaser site.
 
 - Runtime: Deno 2.x.
 - HTTP dependency: JSR `@std/http`.
+- Validation dependency: JSR `@zod/zod` (Zod 4); API request bodies are parsed
+  with a schema in the route module that owns them.
 - Public routes: `/healthz`, `/api/waitlist` (GET count, POST join), plus any
   file under `public/` (`/`, `/index.html`, `/main.css`, `/script.js`,
   `/robots.txt`, `/sitemap.xml`).

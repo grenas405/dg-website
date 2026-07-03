@@ -136,6 +136,41 @@ Deno.test("invalid JSON and bad email are rejected with 400", async () => {
   });
 });
 
+Deno.test("payloads that fail the schema are rejected with 400", async () => {
+  await withKv(async (kv) => {
+    const handler = waitlistRoutes(kv);
+    const bodies = [
+      JSON.stringify({ email: 123 }), // wrong type
+      JSON.stringify({ email: "a@b.co", company: 7 }), // wrong honeypot type
+      JSON.stringify([]), // not an object
+      JSON.stringify("a@b.co"), // bare string
+      JSON.stringify(null),
+    ];
+    for (const body of bodies) {
+      const res = await handler(
+        new Request("http://localhost/api/waitlist", { method: "POST", body }),
+      );
+      assertEquals(res.status, 400);
+      assertEquals((await res.json()).error, "invalid_request");
+    }
+    assertEquals(await waitlistTotal(kv), 0);
+  });
+});
+
+Deno.test("missing email falls through to invalid_email, not a schema error", async () => {
+  await withKv(async (kv) => {
+    const handler = waitlistRoutes(kv);
+    const res = await handler(
+      new Request("http://localhost/api/waitlist", {
+        method: "POST",
+        body: JSON.stringify({}),
+      }),
+    );
+    assertEquals(res.status, 400);
+    assertEquals((await res.json()).error, "invalid_email");
+  });
+});
+
 Deno.test("PUT /api/waitlist is rejected with 405", async () => {
   await withKv(async (kv) => {
     const handler = waitlistRoutes(kv);

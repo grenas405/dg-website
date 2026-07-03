@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { type Handler, json, methodNotAllowed } from "./http.ts";
 
 export type WaitlistEntry = {
@@ -24,6 +26,15 @@ const BACKOFF_CAP_MS = 40;
 
 const EMAIL_KEY_PREFIX = "waitlist";
 const TOTAL_KEY = ["waitlist_total"];
+
+// POST /api/waitlist body. Both fields default to "" so an absent field and an
+// empty one behave identically (email falls through to invalid_email, and the
+// honeypot still catches bots that omit the email entirely). Wrong types are
+// rejected as invalid_request; unknown extra keys are ignored.
+export const joinPayloadSchema = z.object({
+  email: z.string().default(""),
+  company: z.string().default(""),
+});
 
 function backoffDelay(attempt: number): Promise<void> {
   const base = Math.min(2 ** attempt, BACKOFF_CAP_MS);
@@ -112,22 +123,19 @@ export function waitlistRoutes(kv: Deno.Kv): Handler {
       return methodNotAllowed(["GET", "HEAD", "POST"]);
     }
 
-    let payload: Record<string, unknown>;
-    try {
-      const body = await request.json();
-      if (typeof body !== "object" || body === null) throw new Error();
-      payload = body as Record<string, unknown>;
-    } catch {
+    const body = await request.json().catch(() => undefined);
+    const parsed = joinPayloadSchema.safeParse(body);
+    if (!parsed.success) {
       return json({ error: "invalid_request" }, { status: 400 });
     }
+    const { email, company } = parsed.data;
 
     // Honeypot: real users never see or fill the "company" field. If a bot
     // does, return a success-shaped response without touching the store.
-    if (typeof payload.company === "string" && payload.company.trim() !== "") {
+    if (company.trim() !== "") {
       return json({ status: "added" }, { status: 201 });
     }
 
-    const email = typeof payload.email === "string" ? payload.email : "";
     const result = await joinWaitlist(kv, email);
 
     if (result.status === "invalid") {
