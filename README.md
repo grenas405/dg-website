@@ -33,6 +33,16 @@ traffic for `denogenesis.com`:
 deno task start
 ```
 
+On the VPS, the whole runbook below (systemd service, first-time certificate,
+nginx config, webroot renewals, health checks) is automated by one idempotent
+script — re-run it any time after pulling new code or config:
+
+```sh
+sudo ./deploy/setup-vps.sh
+```
+
+The manual steps it performs follow.
+
 Install the systemd service on the VPS:
 
 ```sh
@@ -63,9 +73,10 @@ must exist before `nginx -t` will pass. Prerequisites: DNS A/AAAA records for
      --agree-tos -m pedro.dfedro@gmail.com --no-eff-email
    ```
 
-2. Deploy the proxy config and start nginx:
+2. Deploy the scanner-probe snippet and proxy config, then start nginx:
 
    ```sh
+   sudo cp deploy/nginx/snippets/deny-probes.conf /etc/nginx/snippets/deny-probes.conf
    sudo cp deploy/nginx/denogenesis.com.conf /etc/nginx/sites-available/denogenesis.com
    sudo ln -sf /etc/nginx/sites-available/denogenesis.com /etc/nginx/sites-enabled/denogenesis.com
    sudo nginx -t
@@ -82,7 +93,8 @@ must exist before `nginx -t` will pass. Prerequisites: DNS A/AAAA records for
    sudo certbot renew --dry-run
    ```
 
-HTTP is redirected to HTTPS, and the app emits `Strict-Transport-Security`
+HTTP and `www.denogenesis.com` are 301-redirected to the canonical
+`https://denogenesis.com`, and the app emits `Strict-Transport-Security`
 automatically once requests arrive with `X-Forwarded-Proto: https`.
 
 ## Check
@@ -117,6 +129,9 @@ The app follows OWASP secure-defaults for a static site:
   before `serveDir` runs.
 - Nginx adds `server_tokens off`, a request-body cap, per-IP rate limiting, and
   rejects non-`GET`/`HEAD` methods at the edge.
+- A shared `snippets/deny-probes.conf` (shipped in `deploy/nginx/snippets/`)
+  closes the connection (`444`) on PHP/WordPress/dotfile scanner probes in
+  every vhost, keeping them logged so fail2ban can ban the source IP.
 - `POST` is permitted only on `/api/waitlist` (app) and a dedicated Nginx
   `location /api/` with a tighter rate limit and a `2k` body cap. Deno write
   access is scoped to the KV directory (`--allow-write=data`).
@@ -142,8 +157,11 @@ The server follows a small, composable shape:
   security headers, method guard, and request logging.
 - `deploy/systemd/denogenesis.service` runs the Deno app from
   `/home/sysadmin/.local/src/development/dg-website` as the `sysadmin` user.
-- `deploy/nginx/denogenesis.com.conf` reverse proxies `denogenesis.com` and
-  `www.denogenesis.com` to the Deno process at `127.0.0.1:8004`.
+- `deploy/nginx/denogenesis.com.conf` reverse proxies `denogenesis.com` to the
+  Deno process at `127.0.0.1:8004`, gzips text responses at the edge, and
+  301-redirects HTTP and `www.denogenesis.com` to the canonical HTTPS apex.
+- `deploy/setup-vps.sh` applies all of the above on the VPS in one idempotent
+  run (service, certificate, nginx config, health checks).
 
 Public routes:
 
